@@ -1,0 +1,3 @@
+* DS Lib
+
+This is my personal library for Data Structures implemented in C. Initially, I'm building it to use it on the Data Structures course at UFMG. To facilitate this use case, this is a header-only library, and performance is desired but not mandatory.
