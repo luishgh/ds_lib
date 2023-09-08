@@ -13,4 +13,12 @@ union atomic_data {
   float float_data;
 };
 
+enum tag {INT, FLOAT};
+
+//! Tagged union for atomic data types
+struct tagged_atomic {
+  union atomic_data data;
+  enum tag tag;
+};
+
 #endif /* _DS_LIB_TYPES_H */
