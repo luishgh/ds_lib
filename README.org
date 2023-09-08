@@ -1,6 +1,6 @@
 * DS Lib
 
-This is my personal library for Data Structures implemented in C. Initially, I'm building it to use it on the Data Structures course at UFMG. To facilitate this use case, this is a header-only library, and performance is desired but not mandatory.
+This is my personal library for Data Structures implemented in C. Initially, I'm building it to use it on the [[https://ufmg.br/cursos/graduacao/2377/91205/72554][Data Structures course at UFMG]]. To facilitate this use case, this is a header-only library and performance is desired but not mandatory.
 
 ** Contents
 
@@ -8,3 +8,5 @@ Implementations included:
 
 - [[file:include/ds_lib/list.h][Doubly Linked List]]
 - [[file:include/ds_lib/deque.h][Deque]]
+
+This repository also includes some basic usage tests at =test/=.
