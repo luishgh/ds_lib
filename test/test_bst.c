@@ -4,13 +4,15 @@
 
 int main() {
 
-  union atomic_data arr[] = {42, 3, 1, 5, 2, 4};
+  union atomic_data arr[] = {42, 3, 7, 5, 2, 4};
 
   struct node tree;
   bst_initialize(&tree);
 
   for (int i = 0; i < 6; i++) {
     bst_insert(&tree, arr[i], INT);
+
+    printf("max: %d\nmin: %d\n", bst_max(&tree).int_data, bst_min(&tree).int_data);
   }
 
   printf("max: %d\nmin: %d\n", bst_max(&tree).int_data, bst_min(&tree).int_data);

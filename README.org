@@ -8,5 +8,6 @@ Implementations included:
 
 - [[file:include/ds_lib/list.h][Doubly Linked List]]
 - [[file:include/ds_lib/deque.h][Deque]]
+- [[file:include/ds_lib/trees/bst.h][Simple Binary Search Tree]] (no balancing)
 
 This repository also includes some basic usage tests at =test/=.

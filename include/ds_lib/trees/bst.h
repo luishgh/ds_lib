@@ -18,6 +18,8 @@
    bst_insert: O(n)
 */
 
+// NOTE: Using node->size to determine when the tree is empty is kinda bad, as we add a size_t into every single node and it contains garbage for all but the root node. I will try to improve this in the future, but I really don't want a wrapper struct with a pointer to the root node :/.
+
 struct node {
   struct tagged_atomic data;
   struct node* left;
@@ -41,28 +43,27 @@ static inline void __bst_insert_leaf(struct node **node, struct node *parent, st
   (*node)->right = NULL;
 }
 
-static inline void __bst_insert_int(struct node *node, struct tagged_atomic data) {
-  assert(data.tag == INT);
-  if (data.data.int_data <= node->data.data.int_data) {
-    if (node->left == NULL) __bst_insert_leaf(&node->left, node, data);
-    else __bst_insert_int(node->left, data);
-  } else {
-    if (node->right == NULL) __bst_insert_leaf(&node->right, node, data);
-    else __bst_insert_int(node->right, data);
-  }
-}
-
-static inline void __bst_insert(struct node *root, struct tagged_atomic data) {
+static inline struct node* __bst_insert(struct node *root, struct tagged_atomic data) {
   // fill root
   if (root->size == 0) {
     root->data = data;
-    return;
+    return root;
   }
-  // FIXME: add other types
-  switch(data.tag) {
-  case(INT):
-    __bst_insert_int(root, data);
-    break;
+  struct node *node = root;
+  while (1) {
+    if (compare_atomic(data, node->data)) {
+      if (node->left == NULL) {
+        __bst_insert_leaf(&node->left, node, data);
+        return node->left;
+      }
+      else node = node->left;
+    } else {
+      if (node->right == NULL) {
+        __bst_insert_leaf(&node->right, node, data);
+        return node->right;
+      }
+      else node = node->right;
+    }
   }
 }
 
@@ -73,10 +74,11 @@ static inline void __bst_insert(struct node *root, struct tagged_atomic data) {
 
    Complexity: O(n)
  */
-static inline void bst_insert(struct node *root, union atomic_data data, enum tag type) {
+static inline struct node* bst_insert(struct node *root, union atomic_data data, enum tag type) {
   struct tagged_atomic ta = {data, type};
-  __bst_insert(root, ta);
+  struct node* ret = __bst_insert(root, ta);
   root->size++;
+  return ret;
 }
 
 static inline int __bst_search_int(struct node *node, struct tagged_atomic data) {
