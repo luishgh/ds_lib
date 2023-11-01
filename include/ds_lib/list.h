@@ -33,6 +33,7 @@ struct list {
 static inline void init_list_head(struct list *head) {
   head->next = head;
   head->prev = head;
+  head->data = (union atomic_data) 0;
 }
 
 /*
@@ -96,6 +97,7 @@ static inline void list_add_before(union atomic_data data, struct list *next) {
 */
 static inline void list_push_back(union atomic_data data, struct list *head) {
   list_add_before(data, head);
+  head->data.int_data += 1;
 }
 
 /**
@@ -107,6 +109,11 @@ static inline void list_push_back(union atomic_data data, struct list *head) {
 */
 static inline void list_push_front(union atomic_data data, struct list *head) {
   list_add(data, head);
+  head->data.int_data += 1;
+}
+
+static inline int list_size(struct list *head) {
+  return head->data.int_data;
 }
 
 /**
@@ -193,7 +200,7 @@ static inline void list_initialize(struct list *list, union atomic_data arr[], i
  */
 static inline void list_destroy(struct list *head) {
   assert(!list_empty(head));
-  struct list *pos; int i;
+  struct list *pos;
   for (pos = head->next; pos != (head);) {
     struct list* next_pos = pos->next;
     free(pos);
@@ -210,6 +217,7 @@ static inline void list_destroy(struct list *head) {
  */
 static inline union atomic_data list_at(struct list *head, int idx) {
   struct list *pos = head;
+  idx++; // jump from head to real first element
   for (int i = 0; i < idx; i++) {
     pos = pos->next;
   }
